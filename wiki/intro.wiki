@@ -1,0 +1,12 @@
+#labels Featured
+summary What is a panchanga?
+
+= What is a panchanga? =
+
+Panchanga means 5 limbs or sections in Sanskrit.  They are
+
+  * वार - Day of week.
+  * तिथि - Lunar day.
+  * नक्षत्र - One of 27 divisions of the zodiac
+  * योग - The difference between the longitudes of the sun and moon.
+  * करण - A division of time equal to half a lunar day.
