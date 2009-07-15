@@ -167,11 +167,9 @@ sub _fixed_from_lunar {
     my $s = floor(
         $approx - ( 1.0 / 360.0 ) * sidereal_year * (
             mod(
-                solar_longitude( dt_from_moment($approx) ) - (
-                    $self->{masa} +
-                      ( $self->_purnimanta && $self->{paksha} == 0 ? 1 : 0 ) -
-                      ( $self->_masa_offset > 1 ? 0 : 1 )
-                  ) * 30 + 180,
+                solar_longitude( dt_from_moment($approx) ) -
+                  ( $self->{masa} - ( $self->_masa_offset > 1 ? 0 : 1 ) ) * 30 +
+                  180,
                 360
               ) - 180
         )
