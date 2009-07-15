@@ -263,16 +263,17 @@ sub _lunar_from_fixed {
     my $solarmonth     = zodiac($pnm);
     my $nextsolarmonth = zodiac($nnm);
 
-    if ( $self->_purnimanta && $result->{paksha} == 1 ) {
-        $solarmonth     = amod( $solarmonth + 1,     12 );
-        $nextsolarmonth = amod( $nextsolarmonth + 1, 12 );
+    $result->{masa} = amod( $solarmonth + 1, 12 );
+    $result->{adhikamasa} = ( $solarmonth == $nextsolarmonth ) ? 1 : 0;
+    if (   $self->_purnimanta
+        && $result->{adhikamasa} == 0
+        && $result->{paksha} == 1 )
+    {
+        $result->{masa} = amod( $result->{masa} + 1, 12 );
     }
 
-    $result->{adhikamasa} = ( $solarmonth == $nextsolarmonth ) ? 1 : 0;
-    $result->{masa} = amod( $solarmonth + 1, 12 );
-
     # varsha
-    if ( $result->{masa} <= 1 ) {
+    if ( $result->{masa} <= ( $self->_purnimanta ? 2 : 1 ) ) {
         $result->{varsha} =
           calendar_year( $suryodaya->clone->add( days => 180 ) );
     }

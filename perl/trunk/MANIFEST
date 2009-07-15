@@ -24,3 +24,9 @@ t/vikramasamvata-gujarati-2008.t
 t/vikramasamvata-gujarati-from_object-2006.t
 t/vikramasamvata-gujarati-from_object-2007.t
 t/vikramasamvata-gujarati-from_object-2008.t
+t/vikramasamvata-northern-2006.t
+t/vikramasamvata-northern-2007.t
+t/vikramasamvata-northern-2008.t
+t/vikramasamvata-northern-from_object-2006.t
+t/vikramasamvata-northern-from_object-2007.t
+t/vikramasamvata-northern-from_object-2008.t
