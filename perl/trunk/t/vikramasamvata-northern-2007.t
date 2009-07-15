@@ -217,7 +217,7 @@ is(
         DateTime::Calendar::VikramaSamvata::Northern->new(
             varsha      => 2063,
             adhikamasa  => 0,
-            masa        => 10,
+            masa        => 11,
             paksha      => 1,
             adhikatithi => 0,
             tithi       => 12
@@ -873,7 +873,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -887,7 +887,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -901,7 +901,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -915,7 +915,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -929,7 +929,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -943,7 +943,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -957,7 +957,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -971,7 +971,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -985,7 +985,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -999,7 +999,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1013,7 +1013,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1027,7 +1027,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1041,7 +1041,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1055,7 +1055,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1069,7 +1069,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
@@ -1083,7 +1083,7 @@ is(
 is(
     (
         DateTime::Calendar::VikramaSamvata::Northern->new(
-            varsha      => 2063,
+            varsha      => 2064,
             adhikamasa  => 0,
             masa        => 1,
             paksha      => 1,
