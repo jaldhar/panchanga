@@ -2,10 +2,8 @@ Build.PL
 Changes
 lib/DateTime/Calendar/HalariSamvata.pm
 lib/DateTime/Calendar/ShalivahanaShaka/Southern.pm
-lib/DateTime/Calendar/VikramaSamvata/Northern.pm
 lib/DateTime/Calendar/VikramaSamvata/Gujarati.pm
 lib/DateTime/Indic/Chandramana.pm
-lib/DateTime/Indic/Locale/sn_utf8.pm
 lib/DateTime/Indic/Utils.pm
 LICENSE
 MANIFEST
@@ -26,9 +24,3 @@ t/vikramasamvata-gujarati-2008.t
 t/vikramasamvata-gujarati-from_object-2006.t
 t/vikramasamvata-gujarati-from_object-2007.t
 t/vikramasamvata-gujarati-from_object-2008.t
-t/vikramasamvata-northern-2006.t
-t/vikramasamvata-northern-2007.t
-t/vikramasamvata-northern-2008.t
-t/vikramasamvata-northern-from_object-2006.t
-t/vikramasamvata-northern-from_object-2007.t
-t/vikramasamvata-northern-from_object-2008.t
