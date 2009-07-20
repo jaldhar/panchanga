@@ -9,6 +9,7 @@ my $builder = Module::Build->new(
     dist_name           => 'DateTime-Indic',
     license             => 'perl',
     dist_author         => 'Jaldhar H. Vyas <jaldhar@braincells.com>',
+    dist_abstract       => 'Manipulate dates in various traditional Indian calendar systems.',
     dist_version        => '0.1',
     build_requires => {
         'DateTime'                      => 0,
