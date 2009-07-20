@@ -6,8 +6,9 @@ use warnings;
 use strict;
 use Carp qw/ carp croak /;
 use DateTime::Event::Lunar;
-use DateTime::Indic::Utils qw/ epoch sidereal_year sidereal_month calendar_year
-  lunar_day lunar_on_or_before solar_longitude zodiac /;
+use DateTime::Indic::Utils qw/ epoch sidereal_year sidereal_month
+  lunar_on_or_before solar_longitude saura_rashi saura_varsha tithi_at_dt
+  /;
 use DateTime::Event::Sunrise;
 use DateTime::Util::Calc qw/ amod dt_from_moment mod search_next /;
 use Memoize;
@@ -32,12 +33,12 @@ This class is meant to be subclassed not used directly.
 
 =head1 ABSTRACT
 
-A module that implements an Indian chandramAna (luni-solar,) nirAyana
-(sidereal,) khagolasiddha (heliocentric,) and spaShTa (based on the true times
-of astronomical events) calendar.  The calendar described in this module isn't
-actually used as-is though; rather it is a basis for actual Indian luni-solar
-calendars which are implemented in other modules in the
-L<DateTime::Indic> collection.
+A module that implements an Indian chandramAna (luni-solar,) nirAyana 
+(sidereal,) khagolasiddha (heliocentric,) and spaShTa (based on the true times 
+of astronomical events) calendar.  The calendar described in this module isn't 
+actually used as-is though; rather it is a basis for actual Indian luni-solar 
+calendars which are implemented in other modules in the L<DateTime::Indic> 
+collection.
 
 =cut
 
@@ -381,7 +382,7 @@ sub _fixed_from_lunar {
         )
     );
 
-    my $k = lunar_day( dt_from_moment( $s + ( 1.0 / 4.0 ) ) );
+    my $k = tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) ) );
 
     my $x;
     my $mid = $self->_lunar_from_fixed( dt_from_moment( $s - 15 ),
@@ -401,7 +402,7 @@ sub _fixed_from_lunar {
     my $est = $s + $self->{lunar_day} - $x;
 
     my $tau = $est - mod(
-        lunar_day( dt_from_moment( $est + ( 1.0 / 4.0 ) ) ) -
+        tithi_at_dt( dt_from_moment( $est + ( 1.0 / 4.0 ) ) ) -
           $self->{lunar_day} +
           15,
         30
@@ -437,13 +438,13 @@ sub _lunar_from_fixed {
     );
     my $suryodaya = $sun->sunrise_datetime($dt);
 
-    $result->{lunar_day} = lunar_day($suryodaya);
+    $result->{lunar_day} = tithi_at_dt($suryodaya);
 
     # adhikatithi
     my $last_suryodaya =
       $sun->sunrise_datetime( $dt->clone->subtract( days => 1 ) );
     $result->{adhikatithi} =
-      ( $result->{lunar_day} == lunar_day($last_suryodaya) ) ? 1 : 0;
+      ( $result->{lunar_day} == tithi_at_dt($last_suryodaya) ) ? 1 : 0;
 
     # paksha and normalize tithi number
     $result->{paksha} = 0;
@@ -464,8 +465,8 @@ sub _lunar_from_fixed {
         datetime    => $suryodaya,
         on_or_after => 1
     );
-    my $solarmonth     = zodiac($pnm);
-    my $nextsolarmonth = zodiac($nnm);
+    my $solarmonth     = saura_rashi($pnm);
+    my $nextsolarmonth = saura_rashi($nnm);
 
     $result->{masa} = amod( $solarmonth + 1, 12 );
     $result->{adhikamasa} = ( $solarmonth == $nextsolarmonth ) ? 1 : 0;
@@ -479,10 +480,10 @@ sub _lunar_from_fixed {
     # varsha
     if ( $result->{masa} <= ( $self->_purnimanta ? 2 : 1 ) ) {
         $result->{varsha} =
-          calendar_year( $suryodaya->clone->add( days => 180 ) );
+          saura_varsha( $suryodaya->clone->add( days => 180 ) );
     }
     else {
-        $result->{varsha} = calendar_year($suryodaya);
+        $result->{varsha} = saura_varsha($suryodaya);
     }
     $result->{varsha} -= $self->_era;
     if ( $result->{masa} < $self->_masa_offset ) {
@@ -764,7 +765,7 @@ sub varsha {
 
 #=head3 varsha_name
 #
-#TODO
+#Returns the name of the varSha.
 #
 #=cut
 #

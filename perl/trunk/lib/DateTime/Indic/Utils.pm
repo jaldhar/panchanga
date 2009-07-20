@@ -21,12 +21,12 @@ our @EXPORT_OK = qw/
   creation
   ahargana
   ayanamsha
-  calendar_year
-  lunar_day
   lunar_longitude
   lunar_on_or_before
   solar_longitude
-  zodiac
+  saura_rashi
+  saura_varsha
+  tithi_at_dt
   /;
 
 =head1 NAME
@@ -43,16 +43,52 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-TODO
+  my $dt = DateTime->now;
+  
+  my $ahargana = ahargana($dt);
+
+  my $ayanamsha = ayanamsha($dt);
+
+  my $moon = lunar_longitude($dt);
+  
+  
+  my $d1 = DateTime::Calendar::VikramaSamvata::Gujarati->new(
+    varsha => 2064,
+    masa   => 7,
+    tithi  => 30,
+  );
+  my $d2 = DateTime::Calendar::VikramaSamvata::Gujarati->new(
+    varsha => 2065,
+    masa   => 1,
+    tithi  => 15,
+  );
+  my $bool = lunar_on_or_before($d1, $d2);
+  
+  my $sun = solar_longitude($dt);
+
+  my $rashi = saura_rashi($dt);
+  
+  my $year = saura_varsha($dt);
+  
+  my $lunar_day = tithi_at_dt($dt);
+
 
 =head1 ABSTRACT
 
-TODO
+A collection of utility functions and constants helpful in creating Indian 
+calendars.
 
 =head1 DESCRIPTION
 
 Note:  In this document, Sanskrit words are transliterated using the ITRANS
 scheme.
+
+These functions and constants were not included directly in 
+L<DateTime::Indic::Chandramana> as they are more useful stand-alone. None of 
+them are exported by default.
+
+Most of the functions operate on L<DateTime> objects which I would like to 
+change wherever possible.
 
 =head1 CONSTANTS
 
@@ -139,7 +175,7 @@ sub ahargana {
 
 =head2 ayanamsha($dt)
 
-Given a datetime object, returns the chitrapaksha ayanamsha.
+Given a datetime object, returns the chitrapakSha ayanAMsha.
 
 =cut
 
@@ -168,33 +204,6 @@ sub ayanamsha {
     $off = ( $off - 80_861.27 ) / 3_600.0;
 
     return $off;
-}
-
-=head2 calendar_year ($dt)
-
-Returns the solar year at datetime C<$dt>.
-
-=cut
-
-sub calendar_year {
-    my ($dt) = @_;
-
-    return floor( ahargana($dt) / sidereal_year );
-}
-
-=head2 lunar_day ($dt)
-
-Returns the phase of the moon (tithi) at DateTime C<$dt>, as an integer in the
-range 1..30.
-
-=cut
-
-sub lunar_day {
-    my ($dt) = @_;
-
-    my $t = mod( lunar_longitude($dt) - solar_longitude($dt), 360 );
-
-    return ceil( $t / 12.0 );
 }
 
 =head2 lunar_longitude($dt)
@@ -431,17 +440,44 @@ sub solar_longitude {
     return revolution( $trlong * 180.0 / pi );
 }
 
-=head2 zodiac ($dt)
+=head2 saura_rashi ($dt)
 
 returns the zodiacal sign of the sun at DateTime C<$dt> as an integer in the
-range 0 .. 11.
+range 1 .. 12.
 
 =cut
 
-sub zodiac {
+sub saura_rashi {
     my ($dt) = @_;
 
     return floor( ( solar_longitude($dt) + ayanamsha($dt) ) / 30.0 ) + 1;
+}
+
+=head2 saura_varsha ($dt)
+
+Returns the solar year at datetime C<$dt>.
+
+=cut
+
+sub saura_varsha {
+    my ($dt) = @_;
+
+    return floor( ahargana($dt) / sidereal_year );
+}
+
+=head2 tithi_at_dt ($dt)
+
+Returns the phase of the moon (tithi) at DateTime C<$dt>, as an integer in the
+range 1..30.
+
+=cut
+
+sub tithi_at_dt {
+    my ($dt) = @_;
+
+    my $t = mod( lunar_longitude($dt) - solar_longitude($dt), 360 );
+
+    return ceil( $t / 12.0 );
 }
 
 =head1 BUGS

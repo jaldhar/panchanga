@@ -47,13 +47,7 @@ If you are using Strawberry perl on Windows, it comes with a make utility
 called dmake.  (Replace make with dmake in the instructions above if you are
 using it.)
 
-NOTE: At the moment, some of the tests will fail on Windows if the path to the 
-directory you unpacked the distribution in has spaces in it.  Either skip the 
-tests or move to another directory.
-
-DEPENDENCIES
-
-Using this module requires these distributions from CPAN:
+Using this module requires these distributions:
 
 DateTime
 DateTime-Event-Lunar (0.06 or above)

@@ -9,6 +9,7 @@ lib/DateTime/Indic/Locale/sn_utf8.pm
 lib/DateTime/Indic/Utils.pm
 LICENSE
 MANIFEST
+MANIFEST.SKIP
 README
 t/00-load.t
 t/halarisamvata.t
