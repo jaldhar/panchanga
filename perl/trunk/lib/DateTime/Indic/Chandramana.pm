@@ -106,28 +106,6 @@ pass through the entire zodiac) and days are counted off from this date to
 perform calculations but the actual calendars in use, employ different eras to
 number years.
 
-=cut
-
-#A varSha also has a name based on a 60 year cycle.  In some parts of India the
-#year name is employed more often than its number.  The year names in Sanskrit
-# are:
-#
-#  1  prabhava       16 chitrabhAnu  31 hemalambi    46 paridhAvi
-#  2  vibhava        17 subhAnu      32 vilambi      47 pramAdi
-#  3  shukla         18 tAraNa       33 vikArI       48 Ananda
-#  4  pramoda        19 pArthiva     34 shArvarI     49 rAkshasa
-#  5  prajApati      20 vyaya        35 plava        50 anala
-#  6  a~ngirA        21 sarvajit     36 shubhakrta   51 pi~Ngala
-#  7  shrImukha      22 sarvadhArI   37 shobhana     52 kAlayukta
-#  8  bhAva          23 virodhI      38 krodhI       53 siddhArthi
-#  9  yuvA           24 vikrti       39 vishvavAsu   54 raudra
-#  10 dhAtA          25 khara        40 parAbhava    55 durmati
-#  11 ishvara        26 nandana      41 plava~nga    56 dundubhi
-#  12 bahudhAnya     27 vijaya       42 kIlaka       57 rudhirodgArI
-#  13 pramAthI       28 jaya         43 saumya       58 raktAkShI
-#  14 vikrama        29 manmatha     44 sAdharaNa    59 krodhana
-#  15 vR^isha        30 durmukha     45 virodhakrta  60 kshaya
-
 =head2 The Lunar Month (mAsa)
 
 chandramAna calendars consists of 12 lunar months (mAsa). A mAsa is defined as 
@@ -332,11 +310,6 @@ sub new {
                       sub { ( $_[0] >= -180 && $_[0] < 180 ) },
                 },
             },
-
-            #        locale     =>   {
-            #                            type => SCALAR | OBJECT | UNDEF,
-            #                            default => undef,
-            #                        },
         }
     );
 
@@ -346,11 +319,6 @@ sub new {
       ( $self->{paksha} == 1 && $self->{tithi} < 30 )
       ? $self->{tithi} + 15
       : $self->{tithi};
-
-    #    if(defined($self->{locale})) {
-    #        $self->{locale}  = DateTime::Locale->load($args{locale})
-    #            unless (ref $self->{locale});
-    #    }
 
     return $self;
 }
@@ -560,8 +528,6 @@ sub from_object {
         adhikatithi => $results->{adhikatithi},
         latitude    => $args{latitude},
         longitude   => $args{longitude},
-
-        #locale      => $args{locale},
     );
     return $newobj;
 }
@@ -595,23 +561,11 @@ specifiers are allowed in the format string:
 
 =item * %T Equivalent to L<tithi_name>.
 
-=cut
-
-#=item * %v Equivalent to L<vara_abbrev>.
-#
-#=item * %V Equivalent to L<vara_name>.
-#
-
 =item * %w Equivalent to L<tithi>.
 
 =item * %x Equivalent to '%y %A %M %P %L %w'
 
 =item * %y Equivalent to L<varsha>.
-
-=cut
-
-#=item * %Y Equivalent to L<varsha_name>.
-#
 
 =item * %% A literal `%' character.
 
@@ -644,10 +598,6 @@ my %formats = (
 
     'T' => sub { $_[0]->tithi_name },
 
-    #    'v' => sub { $_[0]->vara_abbrev },
-    #
-    #    'V' => sub { $_[0]->vara_name },
-    #
     'w' => sub { $_[0]->tithi },
 
     'x' => sub {
@@ -663,8 +613,6 @@ my %formats = (
     },
 
     'y' => sub { $_[0]->varsha },
-
-    #    'Y' => sub { $_[0]->varsha_name },
 
     '%' => sub { q{%} },    ## no critic 'ProhibitNoisyQuotes'
 );
@@ -741,12 +689,6 @@ sub _purnimanta {
     return 0;
 }
 
-#sub _varsha_name_style {
-#    my($self) = @_;
-#
-#    return 0;
-#}
-
 =head2 UNITS OF TIME
 
 These methods return various parts of a chandramAna date.
@@ -762,26 +704,6 @@ sub varsha {
 
     return $self->{varsha};
 }
-
-#=head3 varsha_name
-#
-#Returns the name of the varSha.
-#
-#=cut
-#
-#sub varsha_name {
-#    my ($self) = @_;
-#
-#    my $ky = $self->{varsha} + $self->era;
-#    if ($self->{masa} >= $self->masa_offset) {
-#        $ky++;
-#    }
-#    my $barhaspatya_varsha = ($self->_varsha_name_style
-#        ? ($ky + ($ky / 86) + 25) # northern
-#        : ($ky + 12)              # southern
-#    ) % 60;
-#    return $varsha_nama[$barhaspatya_varsha];
-#}
 
 =head3 adhikamasa
 
@@ -980,42 +902,6 @@ sub tithi_name {
     return $tithi_nama[ $self->{tithi} - 1 ];
 }
 
-#=head3 vara
-#
-#returns the day of the week as a decimal number.
-#
-#=cut
-#
-#sub vara {
-#    my ($self) = @_;
-#
-#    return $self->{vara};
-#}
-#
-#=head3 vara_abbrev
-#
-#returns the abbreviated name of the current day of the week.
-#
-#=cut
-#
-#sub vara_abbrev {
-#    my ($self) = @_;
-#
-#    return $vara_abbrev[ $self->{vara} ];
-#}
-#
-#=head3 vara_name
-#
-#returns the name of the current day of the week.
-#
-#=cut
-#
-#sub vara_name {
-#    my ($self) = @_;
-#
-#    return $vara_nama[ $self->{vara} ];
-#}
-
 =head1 BUGS
 
 Please report any bugs or feature requests through the web interface at
@@ -1083,4 +969,3 @@ with this distribution.
 =cut
 
 1;    # End of DateTime::Indic::Chandramana
-
