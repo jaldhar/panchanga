@@ -32,7 +32,14 @@ This documentation describes version 0.1 of this module.
 
 =head1 SYNOPSIS
 
-use DateTime::Calendar::ShalivahanaShaka::Southern;
+  use DateTime::Calendar::ShalivahanaShaka::Southern;
+
+  my $date = DateTime::Calendar::ShalivahanaShaka::Southern->new(
+    varsha => 1931,
+    masa   => 1,
+    paksha => 0,
+    tithi  => 1,
+  );
 
 =head1 ABSTRACT
 

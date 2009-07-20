@@ -44,8 +44,15 @@ This documentation describes version 0.1 of this module.
 
 =head1 SYNOPSIS
 
-use DateTime::Calendar::VikramaSamvata::Northern;
+  use DateTime::Calendar::VikramaSamvata::Northern;
 
+  my $date = DateTime::Calendar::VikramaSamvata::Northern->new(
+      varsha => 2066,
+      masa   => 1,
+      paksha => 0,
+      tithi  => 1,
+  );
+  
 =head1 ABSTRACT
 
 A module that implements the ChandramAna (luni-solar) calendar used by people

@@ -186,7 +186,7 @@ sunrise and this varies depending on where on Earth you are.  In this module
 we use the modern geospatial coordinate system where the prime meridian passing
 through Greenwich is 0 degrees longitude and the equator is 0 degrees latitude.
 However traditionally the temple of mahAkAla (Shiva as the embodiment of Time)
-in Avantika (modern Ujjain, Maharashtra) was considered the prime meridian.
+in Avantika (modern Ujjain, Madhya Pradesh) was considered the prime meridian.
 
 =head1 METHODS
 

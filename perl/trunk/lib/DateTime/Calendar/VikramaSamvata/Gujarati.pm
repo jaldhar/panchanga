@@ -38,8 +38,15 @@ This documentation describes version 0.1 of this module.
 
 =head1 SYNOPSIS
 
-use DateTime::Calendar::VikramaSamvata::Gujarati;
+  use DateTime::Calendar::VikramaSamvata::Gujarati;
 
+  my $date = DateTime::Calendar::VikramaSamvata::Gujarati->new(
+    varsha => 2066,
+    masa   => 8,
+    paksha => 0,
+    tithi  => 1,
+  );
+                
 =head1 ABSTRACT
 
 A module that implements the ChandramAna (luni-solar) calendar used by people

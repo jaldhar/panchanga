@@ -55,11 +55,13 @@ our $VERSION = '0.01';
   my $d1 = DateTime::Calendar::VikramaSamvata::Gujarati->new(
     varsha => 2064,
     masa   => 7,
+    paksha => 1,
     tithi  => 30,
   );
   my $d2 = DateTime::Calendar::VikramaSamvata::Gujarati->new(
     varsha => 2065,
     masa   => 1,
+    paksha => 0,
     tithi  => 15,
   );
   my $bool = lunar_on_or_before($d1, $d2);
