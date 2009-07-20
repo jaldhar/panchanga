@@ -1,5 +1,9 @@
-Revision history for DateTime-Calendar-Indic
+Revision history for DateTime-Indic
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.1     Mon Jul 20 17:07:02 EDT 2009
+        Initial Release.
+        The following calendars are supported:
+            South Indian Shalivahana Shaka
+            Gujarati Vikrama Samvata
+            Halari/Kutchhi Samvata
 
