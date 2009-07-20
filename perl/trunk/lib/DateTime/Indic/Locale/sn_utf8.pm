@@ -69,35 +69,68 @@ __END__
 
 DateTime::Indic::Locale::sn_utf8 - Sanskrit UTF8 locale for Indic calendars
 
+=head1 BUGS
+
+Please report any bugs or feature requests through the web interface at
+<http://code.google.com/p/panchanga/issues/list>. I
+will be notified, and then you’ll automatically be notified of progress
+on your bug as I make changes. B<Please do not use rt.cpan.org!.>
+
 =head1 SUPPORT
 
+You can find documentation for this module with the perldoc command.
+
+    perldoc DateTime::Indic::Locale::sn_utf8
+
 Support requests for this module and questions about panchanga ganita should
-be sent to the panchanga-devel@lists.braincells.com email list. See 
+be sent to the panchanga-devel@lists.braincells.com email list. See
 L<http://lists.braincells.com/> for more details.
 
-Questions related to the DateTime API should be sent to the 
+Questions related to the DateTime API should be sent to the
 datetime@perl.org email list. See L<http://lists.perl.org/> for more details.
 
-Please submit bugs to the CPAN RT system at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=datetime-Calendar-indic>
-or via email at bug-datetime-calendar-indic@rt.cpan.org.
+You can also look for information at:
+
+=over 4
+
+=item * This projects web site
+
+L<http://code.google.com/p/panchanga/>
+
+=item * This projects (read-only) subversion source code repository
+
+L<http://panchanga.googlecode.com/svn/perl/>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/DateTime-Indic>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/DateTime-Indic>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/DateTime-Indic>
+
+=back
+
+=head1 SEE ALSO
+
+L<DateTime>
 
 =head1 AUTHOR
 
-Jaldhar H. Vyas, E<lt>jaldhar@braincells.comE<gt>
+Jaldhar H. Vyas, C<< <jaldhar at braincells.com> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2007, Consolidated Braincells Inc.
+Copyright (C) 2009, Consolidated Braincells Inc.
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 The full text of the license can be found in the LICENSE file included
-with this module.
-
-=head1 SEE ALSO
-
-L<http://datetime.perl.org/> -- The DateTime project web site.
+with this distribution.
 
 =cut

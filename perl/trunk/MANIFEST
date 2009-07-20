@@ -7,6 +7,7 @@ lib/DateTime/Calendar/VikramaSamvata/Gujarati.pm
 lib/DateTime/Indic/Chandramana.pm
 lib/DateTime/Indic/Locale/sn_utf8.pm
 lib/DateTime/Indic/Utils.pm
+LICENSE
 MANIFEST
 README
 t/00-load.t

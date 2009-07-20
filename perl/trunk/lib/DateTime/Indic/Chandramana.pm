@@ -103,41 +103,41 @@ Constructs a new instance of this class.  The following arguments can be given:
 
 =over 4
 
-=item varsha
+=item * varsha
 
 The numeric year according to the calender's era.  Defaults to 0.
 
-=item masa
+=item * masa
 
 The mAsa (lunar month) as a number from 1 to 12.  Defaults to 1.
 
-=item adhikamasa
+=item * adhikamasa
 
 1 if this is an adhika (leap) mAsa, 0 otherwise.  Defaults to 0.
 
-=item paksha
+=item * paksha
 
 1 if this is the kR^iShNapakSha (waning half)  of a mAsa, 0 if it is the
 shuklapakSha (waxing half.)  Defaults to 0.
 
-=item tithi
+=item * tithi
 
 The numeric tithi (lunar day) expressed as a number from 1 to 14 or by 
 convention, 15 for the pUrNimA (full moon) and 30 for the amAvAsya (new moon.) 
 Defaults to 1.
 
-=item adhikatithi
+=item * adhikatithi
 
 1 if this is an adhika (leap) tithi, 0 otherwise.  Defaults to 0.
 
-=item latitude
+=item * latitude
 
 The latitude of the point for which the panchanga is to be calculated 
 expressed as decimal degrees.  Negative values are used for latitudes south of 
 the equator so the allowable range for this argument is from -180 to 180.  
 Defaults to 23.15, the latitude of avantika.
 
-=item longitude
+=item * longitude
 
 The longitude of the point for which the panchanga is to be calculated 
 expressed as decimal degrees.  Negative values are used for longitudes west of 
@@ -896,15 +896,12 @@ sub tithi_name {
 #    return $vara_nama[ $self->{vara} ];
 #}
 
-=head1 AUTHOR
-
-Jaldhar H. Vyas, C<< <jaldhar at braincells.com> >>
-
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-datetime-indic at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DateTime-Indic>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests through the web interface at
+<http://code.google.com/p/panchanga/issues/list>. I
+will be notified, and then you’ll automatically be notified of progress
+on your bug as I make changes. B<Please do not use rt.cpan.org!.>
 
 =head1 SUPPORT
 
@@ -912,13 +909,24 @@ You can find documentation for this module with the perldoc command.
 
     perldoc DateTime::Indic::Chandramana
 
+Support requests for this module and questions about panchanga ganita should
+be sent to the panchanga-devel@lists.braincells.com email list. See
+L<http://lists.braincells.com/> for more details.
+
+Questions related to the DateTime API should be sent to the
+datetime@perl.org email list. See L<http://lists.perl.org/> for more details.
+
 You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker
+=item * This projects web site
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime-Indic>
+L<http://code.google.com/p/panchanga/>
+
+=item * This projects (read-only) subversion source code repository
+
+L<http://panchanga.googlecode.com/svn/perl/>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -934,18 +942,23 @@ L<http://search.cpan.org/dist/DateTime-Indic>
 
 =back
 
-
 =head1 SEE ALSO
 
 L<DateTime>
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2008 Consolidated Braincells Inc, all rights reserved.
+Jaldhar H. Vyas, C<< <jaldhar at braincells.com> >>
 
-This program is free software; you can redistribute it and/or modify it
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2009, Consolidated Braincells Inc.
+
+This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
+The full text of the license can be found in the LICENSE file included
+with this distribution.
 
 =cut
 
