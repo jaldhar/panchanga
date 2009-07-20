@@ -58,7 +58,7 @@ my @vara_nama = qw{
 my @vara_abbrev = qw { ra so ma bu gu shu sha };
 
 my @masa_nama = qw{
-  chaitra vaishAka jyeShTa AShADha shrAvaNa bhAdrapada ashvina kArtika
+  chaitra vaishAkha jyeShTa AShADha shrAvaNa bhAdrapada ashvina kArtika
   mArgashIrasa pauSha mAgha phAlguna
 };
 
