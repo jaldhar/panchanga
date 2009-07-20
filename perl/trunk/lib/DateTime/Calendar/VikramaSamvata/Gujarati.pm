@@ -47,6 +47,9 @@ originating in the Indian state of Gujarat.
 
 =head1 DESCRIPTION
 
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
+
 The Gujarati vikrama saMvata started in the 3044th year of the current kali
 yuga.  The year begins on kArtika shukla 1 and months are amAsanta.
 

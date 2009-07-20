@@ -51,7 +51,8 @@ TODO
 
 =head1 DESCRIPTION
 
-TODO
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
 
 =head1 CONSTANTS
 

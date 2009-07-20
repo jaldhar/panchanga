@@ -53,6 +53,9 @@ originating in Northern India.
 
 =head1 DESCRIPTION
 
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
+
 The Northern vikrama saMvata started in the 3044th year of the current kali
 yuga.  The year begins on Chaitra shukla 1 and months are pUrNimAnta.
 

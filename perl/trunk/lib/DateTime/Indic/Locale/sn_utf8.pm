@@ -69,6 +69,18 @@ __END__
 
 DateTime::Indic::Locale::sn_utf8 - Sanskrit UTF8 locale for Indic calendars
 
+=head1 USAGE
+
+Not to be used directly.
+
+=head1 DESCRIPTION
+
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
+
+This module provides Sanskrit UTF8 encoded translations for the strings in
+L<DateTime::Indic::Chandramana> and its subclasses.
+ 
 =head1 BUGS
 
 Please report any bugs or feature requests through the web interface at

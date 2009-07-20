@@ -32,7 +32,7 @@ This class is meant to be subclassed not used directly.
 
 =head1 ABSTRACT
 
-A module that implements an Indian ChandramAna (luni-solar,) nirAyana
+A module that implements an Indian chandramAna (luni-solar,) nirAyana
 (sidereal,) khagolasiddha (heliocentric,) and spaShTa (based on the true times
 of astronomical events) calendar.  The calendar described in this module isn't
 actually used as-is though; rather it is a basis for actual Indian luni-solar
@@ -91,6 +91,124 @@ my $purnima_nama = 'pUrNimA';
 
 my $purnima_abbrev = 'pU';
 
+=head1 DESCRIPTION
+
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
+
+=head2 The Year (varSha)
+
+All chandramAna calendars have as their epoch, the first day of the current 
+kali yuga which is equivalent to Friday, January 23, -3101 BC in the proleptic 
+Gregorian calendar. sidereal years (the time it takes for the sun to make one
+pass through the entire zodiac) and days are counted off from this date to
+perform calculations but the actual calendars in use, employ different eras to
+number years.
+
+=cut
+
+#A varSha also has a name based on a 60 year cycle.  In some parts of India the
+#year name is employed more often than its number.  The year names in Sanskrit
+# are:
+#
+#  1  prabhava       16 chitrabhAnu  31 hemalambi    46 paridhAvi
+#  2  vibhava        17 subhAnu      32 vilambi      47 pramAdi
+#  3  shukla         18 tAraNa       33 vikArI       48 Ananda
+#  4  pramoda        19 pArthiva     34 shArvarI     49 rAkshasa
+#  5  prajApati      20 vyaya        35 plava        50 anala
+#  6  a~ngirA        21 sarvajit     36 shubhakrta   51 pi~Ngala
+#  7  shrImukha      22 sarvadhArI   37 shobhana     52 kAlayukta
+#  8  bhAva          23 virodhI      38 krodhI       53 siddhArthi
+#  9  yuvA           24 vikrti       39 vishvavAsu   54 raudra
+#  10 dhAtA          25 khara        40 parAbhava    55 durmati
+#  11 ishvara        26 nandana      41 plava~nga    56 dundubhi
+#  12 bahudhAnya     27 vijaya       42 kIlaka       57 rudhirodgArI
+#  13 pramAthI       28 jaya         43 saumya       58 raktAkShI
+#  14 vikrama        29 manmatha     44 sAdharaNa    59 krodhana
+#  15 vR^isha        30 durmukha     45 virodhakrta  60 kshaya
+
+=head2 The Lunar Month (mAsa)
+
+chandramAna calendars consists of 12 lunar months (mAsa). A mAsa is defined as 
+one complete phase cycle of the Moon. Some calendars use amAsanta mAsa which 
+end on the day of the new moon.  Others use pUrNimAnta mAsa which end on the
+day of the full moon.
+
+The Sanskrit names of the mAsa are:
+
+  1  chaitra       7  ashvina 
+  2  vaishAkha     8  kArtika
+  3  jyeShTa       9  mArgashIrasa 
+  4  AShADha       10 pauSha
+  5  shrAvaNa      11 mAgha
+  6  bhAdrapada    12 phAlguna
+
+Some calendars start from a mAsa other than chaitra.  Nevertheless chaitra 
+would still be considered the "first" month despite not being the first month 
+of the year.
+
+=head2 Leap and Omitted mAsa (adhikamAsa and kShayamAsa)
+
+Because 12 mAsa can be a little bit more or less than a sidereal year, it is 
+sometimes necessary to add or subtract a mAsa to keep the two synchronized.  
+When the Sun spends an entire mAsa without entering another zodiacal sign,
+the mAsa is called adhika ("leap") and it has the same name as the following 
+month.  Very rarely, when the Sun enters two zodiacal signs in what would have 
+been one mAsa, it is kShaya (omitted altogether.)
+
+=head2 Waxing and Waning Halves (pakSha)
+
+Each masa is divided into two halves.  The shuklapakSha ("bright part") is 
+when the Moon is waxing, culminating in the full moon.  The kR^iShNapakSha 
+("dark half") is when the Moon is waning, culminating in the new moon.
+Therefore in a pUrNimAnta mAsa, the kR^ishNapakSha is first, followed by the
+shuklapakSha, whereas in an amAsanta mAsa, the shuklapakSha is first, followed
+by the kR^iShNapakSha.
+
+=head2 Lunar Day (tithi)
+
+Each pakSha consists of tithis which are equivalent to a 12 degree increments 
+of increase or decrease in the phase of the Moon.  The tithis of each pakSha
+are named and numbered as follows:
+
+  1  pratipadA ("beginning")
+  2  dvitIyA ("2nd")
+  3  tR^itIya ("3rd")
+  4  chaturthI ("4th")
+  5  paMchamI ("5th")
+  6  ShaShTI ("6th")
+  7  saptamI ("7th")
+  8  aShTamI ("8th")
+  9  navamI  ("9th")
+  10 dashamI ("10th")
+  11 ekAdashI ("11th")
+  12 dvAdashI ("12th")
+  13 trayodashI ("13th")
+  14 chaturdashI ("14th")
+  15 pUrNimA ("full moon")
+  30 amAvasya ("new moon")
+
+The tithi of a particular day is the one that prevails at sunrise on that day.  
+(This is called the uditatithi.)
+
+=head2 Leap and Omitted tithi (adhikatithi and kShayatithi)
+
+Because the orbital speed of the Moon is not constant, sometimes a tithi can 
+start and end entirely within one day.  In that case it is called a 
+kShayatithi and it is omitted from the calendar.  Other times, one tithi 
+stretches over two sunrises.  This is called a vR^iddha ("large") tithi.  In 
+this case, both days have the same number and name.  The first is prefixed 
+adhika or "leap".
+
+=head2 Avantika
+
+In order to know the correct chandramAna date, you have to know the time of 
+sunrise and this varies depending on where on Earth you are.  In this module
+we use the modern geospatial coordinate system where the prime meridian passing
+through Greenwich is 0 degrees longitude and the equator is 0 degrees latitude.
+However traditionally the temple of mahAkAla (Shiva as the embodiment of Time)
+in Avantika (modern Ujjain, Maharashtra) was considered the prime meridian.
+
 =head1 METHODS
 
 =head2 DATETIME METHODS
@@ -109,11 +227,12 @@ The numeric year according to the calender's era.  Defaults to 0.
 
 =item * masa
 
-The mAsa (lunar month) as a number from 1 to 12.  Defaults to 1.
+The mAsa (lunar month) as a number from 1 to 12.  Defaults to 1.  See
+L<The Lunar Month (mAsa)> for the month corresponding to each number.
 
 =item * adhikamasa
 
-1 if this is an adhika (leap) mAsa, 0 otherwise.  Defaults to 0.
+1 if this is an adhikamAsa (leap month), 0 otherwise.  Defaults to 0.
 
 =item * paksha
 
@@ -132,7 +251,7 @@ Defaults to 1.
 
 =item * latitude
 
-The latitude of the point for which the panchanga is to be calculated 
+The latitude of the point for which the date is to be calculated 
 expressed as decimal degrees.  Negative values are used for latitudes south of 
 the equator so the allowable range for this argument is from -180 to 180.  
 Defaults to 23.15, the latitude of avantika.

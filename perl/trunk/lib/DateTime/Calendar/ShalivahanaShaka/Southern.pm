@@ -42,6 +42,9 @@ Pradesh.
 
 =head1 DESCRIPTION
 
+Note:  In this document, Sanskrit words are transliterated using the ITRANS
+scheme.
+
 The Southern shAlivAhana shaka started in the 3179th year of the current kali
 yuga.  The year begins on chaitra shukla 1 and months are amAsanta.
 
