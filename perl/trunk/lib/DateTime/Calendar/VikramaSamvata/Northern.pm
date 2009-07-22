@@ -17,12 +17,6 @@ sub _era {
     return 3044;
 }
 
-sub _masa_offset {
-    my ($self) = @_;
-
-    return 0;
-}
-
 sub _purnimanta {
     my ($self) = @_;
 
