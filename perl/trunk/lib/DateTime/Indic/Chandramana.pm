@@ -474,9 +474,29 @@ sub clone {
 =head3 from_object
 
 Builds a C<DateTime::Calendar::Chandramana> object from another I<DateTime> 
-object.  This function takes an C<object> parameter and optionally C<locale>. 
-For example:
+object.  This function takes the following parameters:
 
+
+=item * object
+
+a DateTime API compatible object.  (Basically this means it supports 
+L<utc_rd_Values>.)  This parameter is required.
+
+=item * latitude
+
+The latitude of the point for which the date is to be calculated 
+expressed as decimal degrees.  Negative values are used for latitudes south of 
+the equator so the allowable range for this argument is from -180 to 180.  
+Defaults to 23.15, the latitude of avantika.
+
+=item * longitude
+
+The longitude of the point for which the panchanga is to be calculated 
+expressed as decimal degrees.  Negative values are used for longitudes west of 
+Greenwich so the allowable range for this argument is from -180 to 180.  
+Defaults to 75.76, the longitude of avantika.
+
+=back
 
 =cut
 
