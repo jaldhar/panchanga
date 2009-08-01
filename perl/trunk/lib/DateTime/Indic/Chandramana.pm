@@ -320,6 +320,15 @@ sub new {
       ? $self->{tithi} + 15
       : $self->{tithi};
 
+    $self->{sun} = DateTime::Event::Sunrise->new(
+        latitude  => $self->{latitude},
+        longitude => $self->{longitude},
+        altitude  => 0,
+    );
+
+    ( $self->{rd_days}, $self->{rd_secs}, $self->{rd_nanosecs} ) =
+      $self->_fixed_from_lunar;
+
     return $self;
 }
 
@@ -330,10 +339,7 @@ sub _fixed_from_lunar {
 
     my $approx =
       epoch +
-      sidereal_year *
-      ( $self->{varsha} +
-          $self->_era +
-          ( $self->{masa} - ( $self->_masa_offset > 1 ? 0 : 1 ) ) / 12.0 );
+      sidereal_year * ( $self->{varsha} + $self->_era + $self->{masa} / 12.0 );
 
     if ( $self->{masa} < $self->_masa_offset ) {
         $approx += sidereal_year;
@@ -343,7 +349,7 @@ sub _fixed_from_lunar {
         $approx - ( 1.0 / 360.0 ) * sidereal_year * (
             mod(
                 solar_longitude( dt_from_moment($approx) ) -
-                  ( $self->{masa} - ( $self->_masa_offset > 1 ? 0 : 1 ) ) * 30 +
+                  $self->{masa} * 30 +
                   180,
                 360
               ) - 180
@@ -353,8 +359,9 @@ sub _fixed_from_lunar {
     my $k = tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) ) );
 
     my $x;
-    my $mid = $self->_lunar_from_fixed( dt_from_moment( $s - 15 ),
-        $self->{latitude}, $self->{longitude} );
+
+    my $mid =
+      $self->_lunar_from_fixed( dt_from_moment( $s - 15 ), $self->{sun} );
     if (
         $mid->{masa} < $self->{masa}
         || ( $mid->{adhikamasa}
@@ -381,11 +388,8 @@ sub _fixed_from_lunar {
     search_next(
         base  => $date,
         check => sub {
-            return lunar_on_or_before(
-                $self,
-                $self->_lunar_from_fixed(
-                    $_[0], $self->{latitude}, $self->{longitude},
-                ),
+            return lunar_on_or_before( $self,
+                $self->_lunar_from_fixed( $_[0], $self->{sun}, ),
             );
         },
         next => sub { $_[0]->add( days => 1 ); },
@@ -395,15 +399,10 @@ sub _fixed_from_lunar {
 }
 
 sub _lunar_from_fixed {
-    my ( $self, $dt, $latitude, $longitude ) = @_;
+    my ( $self, $dt, $sun ) = @_;
 
     my $result = {};
 
-    my $sun = DateTime::Event::Sunrise->new(
-        latitude  => $latitude,
-        longitude => $longitude,
-        altitude  => 0,
-    );
     my $suryodaya = $sun->sunrise_datetime($dt);
 
     $result->{lunar_day} = tithi_at_dt($suryodaya);
@@ -515,9 +514,13 @@ sub from_object {
         }
     );
 
-    my $results =
-      $class->_lunar_from_fixed( $args{object}, $args{latitude},
-        $args{longitude}, );
+    $sun = DateTime::Event::Sunrise->new(
+        latitude  => $args{latitude},
+        longitude => $args{longitude},
+        altitude  => 0,
+    );
+
+    my $results = $class->_lunar_from_fixed( $args{object}, $sun, );
 
     my $newobj = $class->new(
         varsha      => $results->{varsha},
@@ -661,12 +664,6 @@ nanoseconds.  See L<DateTime> for more details.
 
 sub utc_rd_values {
     my ($self) = @_;
-
-    if ( !exists $self->{rd_days} ) {
-        $self->{rd_days}     = $self->_fixed_from_lunar;
-        $self->{rd_secs}     = 0;
-        $self->{rd_nanosecs} = 0;
-    }
 
     return ( $self->{rd_days}, $self->{rd_secs}, $self->{rd_nanosecs} || 0 );
 }
