@@ -113,14 +113,15 @@ one complete phase cycle of the Moon. Some calendars use amAsanta mAsa which
 end on the day of the new moon.  Others use pUrNimAnta mAsa which end on the
 day of the full moon.
 
-The Sanskrit names of the mAsa are:
+The Sanskrit names of the mAsa and their approximate correspondence to 
+Western months are:
 
-  1  chaitra       7  ashvina 
-  2  vaishAkha     8  kArtika
-  3  jyeShTa       9  mArgashIrasa 
-  4  AShADha       10 pauSha
-  5  shrAvaNa      11 mAgha
-  6  bhAdrapada    12 phAlguna
+  1  chaitra (March-April)            7  ashvina (September-October)
+  2  vaishAkha (April-May)            8  kArtika (October-November)
+  3  jyeShTa (May-June)               9  mArgashIrasa (November-December)
+  4  AShADha (June-July)              10 pauSha (December-January)
+  5  shrAvaNa (July-August)           11 mAgha (January-February)
+  6  bhAdrapada (August-September)    12 phAlguna (February-March)
 
 Some calendars start from a mAsa other than chaitra.  Nevertheless chaitra 
 would still be considered the "first" month despite not being the first month 
@@ -195,7 +196,7 @@ vAra are:
   6 shukravAra ("day of Venus" i.e. Friday)
   7 shanivAra ("day of Saturn" i.e. Saturday)
 
-=head2 Avantika
+=head2 Latitude, Longitude, and Avantika
 
 In order to know the correct chandramAna date, you have to know the time of 
 sunrise and this varies depending on where on Earth you are.  In this module
@@ -494,6 +495,7 @@ sub clone {
 Builds a C<DateTime::Calendar::Chandramana> object from another I<DateTime> 
 object.  This function takes the following parameters:
 
+=over 4
 
 =item * object
 
@@ -786,7 +788,7 @@ sub adhikamasa_name {
 
 =head3 masa
 
-Returns the mAsa as a number from 1 to 12
+Returns the mAsa as a number from 1 (chaitra) to 12
 
 =cut
 
