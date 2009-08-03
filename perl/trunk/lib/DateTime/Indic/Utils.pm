@@ -19,7 +19,6 @@ our @EXPORT_OK = qw/
   sidereal_month
   synodic_month
   creation
-  ahargana
   ayanamsha
   lunar_longitude
   lunar_on_or_before
@@ -45,8 +44,6 @@ our $VERSION = '0.01';
 
   my $dt = DateTime->now;
   
-  my $ahargana = ahargana($dt);
-
   my $ayanamsha = ayanamsha($dt);
 
   my $moon = lunar_longitude($dt);
@@ -161,19 +158,6 @@ Fixed date of the beginning of the present yuga cycle.
 use constant creation => epoch - 1_955_880_000 * sidereal_year;
 
 =head1 FUNCTIONS
-
-=head2 ahargana($dt)
-
-Return the number of days that have elapsed from the beginning of the current
-Kali Yuga to C<$dt>.
-
-=cut
-
-sub ahargana {
-    my ($dt) = @_;
-
-    return ( $dt->utc_rd_values )[0] - epoch;
-}
 
 =head2 ayanamsha($dt)
 
@@ -464,7 +448,7 @@ Returns the solar year at datetime C<$dt>.
 sub saura_varsha {
     my ($dt) = @_;
 
-    return floor( ahargana($dt) / sidereal_year );
+    return floor( ( ( $dt->utc_rd_values )[0] - epoch ) / sidereal_year );
 }
 
 =head2 tithi_at_dt ($dt)
