@@ -179,6 +179,22 @@ stretches over two sunrises.  This is called a vR^iddha ("large") tithi.  In
 this case, both days have the same number and name.  The first is prefixed 
 adhika or "leap".
 
+=head2 Solar Day (vAra)
+
+The Indian day does not start after midnight but at sunrise.  The period 
+from sunrise to sunset is called ahasa ("day") and the period from sunset to 
+the next sunrise is called rAtra ("night.") Together they make one ahorAtra or
+vAra.  Each vAra has a name in a seven-day cycle. Thr Sanskrit names of the
+vAra are:
+
+  1 ravivAra ("day of the Sun" i.e. Sunday)
+  2 somavAra ("day of the Moon" i.e. Monday)
+  3 ma~ngalavAra ("day of Mars" i.e. Tuesday)
+  4 budhavAra ("day of Mercury" i.e. Wednesday)
+  5 guruvAra  ("day of Jupiter" i.e. Thursday)
+  6 shukravAra ("day of Venus" i.e. Friday)
+  7 shanivAra ("day of Saturn" i.e. Saturday)
+
 =head2 Avantika
 
 In order to know the correct chandramAna date, you have to know the time of 
@@ -328,6 +344,8 @@ sub new {
 
     ( $self->{rd_days}, $self->{rd_secs}, $self->{rd_nanosecs} ) =
       $self->_fixed_from_lunar;
+
+    $self->{vara} = amod($self->{rd_days} - epoch - 1, 7);
 
     return $self;
 }
@@ -584,6 +602,10 @@ specifiers are allowed in the format string:
 
 =item * %T Equivalent to L<tithi_name>.
 
+=item * %v Equivalent to L<vara_abbrev>.
+
+=item * %V Equivalent to L<vara_name>.
+
 =item * %w Equivalent to L<tithi>.
 
 =item * %x Equivalent to '%y %A %M %P %L %w'
@@ -620,6 +642,10 @@ my %formats = (
     't' => sub { $_[0]->tithi_abbrev },
 
     'T' => sub { $_[0]->tithi_name },
+
+    'v' => sub { $_[0]->vara_abbrev },
+
+    'V' => sub { $_[0]->vara_name },
 
     'w' => sub { $_[0]->tithi },
 
@@ -919,6 +945,42 @@ sub tithi_name {
     return $tithi_nama[ $self->{tithi} - 1 ];
 }
 
+=head3 vara
+
+Returns the vAra as a number from 1 (ravivAra) to 7.
+
+=cut
+
+sub vara {
+    my ($self) = @_;
+
+    return $self->{vara};
+}
+
+=head3 vara_abbrev
+
+Returns the abbreviated vAra name.
+
+=cut
+
+sub vara_abbrev {
+    my ($self) = @_;
+
+    return $vara_abbrev[ $self->{vara} - 1 ];
+}
+
+=head3 vara_name
+
+Returns the full vAra name.
+
+=cut
+
+sub vara_name {
+    my ($self) = @_;
+
+    return $vara_nama[ $self->{vara} - 1 ];
+}
+
 =head1 BUGS
 
 Please report any bugs or feature requests through the web interface at
@@ -995,4 +1057,3 @@ with this distribution.
 =cut
 
 1;    # End of DateTime::Indic::Chandramana
-

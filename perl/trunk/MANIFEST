@@ -18,6 +18,7 @@ t/shalivahanashaka-southern-2007.t
 t/shalivahanashaka-southern-2008.t
 t/shalivahanashaka-southern-from_object-2007.t
 t/shalivahanashaka-southern-from_object-2008.t
+t/vara.t
 t/vikramasamvata-gujarati-2006.t
 t/vikramasamvata-gujarati-2007.t
 t/vikramasamvata-gujarati-2008.t
