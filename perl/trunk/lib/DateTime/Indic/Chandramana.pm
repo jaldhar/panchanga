@@ -554,7 +554,7 @@ sub from_object {
         }
     );
 
-    $sun = DateTime::Event::Sunrise->new(
+    my $sun = DateTime::Event::Sunrise->new(
         latitude  => $args{latitude},
         longitude => $args{longitude},
         altitude  => 0,
