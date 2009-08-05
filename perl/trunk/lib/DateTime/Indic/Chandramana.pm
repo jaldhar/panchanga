@@ -7,7 +7,7 @@ use strict;
 use Carp qw/ carp croak /;
 use DateTime::Event::Lunar;
 use DateTime::Indic::Utils qw/ epoch sidereal_year sidereal_month
-  lunar_on_or_before solar_longitude saura_rashi saura_varsha tithi_at_dt
+  lunar_on_or_before saura_rashi saura_varsha solar_longitude tithi_at_dt
   /;
 use DateTime::Event::Sunrise;
 use DateTime::Util::Calc qw/ amod dt_from_moment mod search_next /;
@@ -259,6 +259,12 @@ expressed as decimal degrees.  Negative values are used for longitudes west of
 Greenwich so the allowable range for this argument is from -180 to 180.  
 Defaults to 75.76, the longitude of avantika.
 
+=item * time_zone
+
+Time zone for which the panchanga is to be calculated.  It can either be a
+timezone name accepted by L<DateTime::TimeZone> or a L<DateTime::TimeZone> 
+object.  Defaults to 'Asia/Kolkata' (Indian Standard Time.)
+
 =back
 
 =cut
@@ -327,11 +333,15 @@ sub new {
                       sub { ( $_[0] >= -180 && $_[0] < 180 ) },
                 },
             },
+            time_zone => {
+                type      => SCALAR | OBJECT,
+                default   => 'Asia/Kolkata', # Indian Standard Time
+            },
         }
     );
 
     my $self = bless \%args, $class;
-
+    
     $self->{lunar_day} =
       ( $self->{paksha} == 1 && $self->{tithi} < 30 )
       ? $self->{tithi} + 15
@@ -367,7 +377,8 @@ sub _fixed_from_lunar {
     my $s = floor(
         $approx - ( 1.0 / 360.0 ) * sidereal_year * (
             mod(
-                solar_longitude( dt_from_moment($approx) ) -
+                solar_longitude( dt_from_moment($approx)
+                    ->set_time_zone($self->{time_zone}) ) -
                   $self->{masa} * 30 +
                   180,
                 360
@@ -375,12 +386,15 @@ sub _fixed_from_lunar {
         )
     );
 
-    my $k = tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) ) );
+    my $k = tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) )
+        ->set_time_zone($self->{time_zone}) );
 
     my $x;
 
     my $mid =
-      $self->_lunar_from_fixed( dt_from_moment( $s - 15 ), $self->{sun} );
+      $self->_lunar_from_fixed( 
+        dt_from_moment( $s - 15 )->set_time_zone($self->{time_zone}),
+        $self->{sun} );
     if (
         $mid->{masa} < $self->{masa}
         || ( $mid->{adhikamasa}
@@ -396,13 +410,14 @@ sub _fixed_from_lunar {
     my $est = $s + $self->{lunar_day} - $x;
 
     my $tau = $est - mod(
-        tithi_at_dt( dt_from_moment( $est + ( 1.0 / 4.0 ) ) ) -
+        tithi_at_dt( dt_from_moment( 
+          $est + ( 1.0 / 4.0 ) )->set_time_zone($self->{time_zone}) ) -
           $self->{lunar_day} +
           15,
         30
     ) + 15;
 
-    my $date = dt_from_moment($tau);
+    my $date = dt_from_moment($tau)->set_time_zone($self->{time_zone});
 
     search_next(
         base  => $date,
@@ -422,7 +437,8 @@ sub _lunar_from_fixed {
 
     my $result = {};
 
-    my $suryodaya = $sun->sunrise_datetime($dt);
+    my $suryodaya = $sun->sunrise_datetime($dt)->
+        set_time_zone($dt->time_zone);
 
     $result->{lunar_day} = tithi_at_dt($suryodaya);
 
