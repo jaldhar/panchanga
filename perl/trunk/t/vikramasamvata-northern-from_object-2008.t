@@ -147,7 +147,7 @@ foreach my $month (sort keys %{$dates}) {
     foreach my $expected (@{$dates->{$month}}) {
         ++$day;
         my $dt = DateTime->new(day => $day, month => $month, year => 2008, 
-            time_zone => 'Asia/Calcutta');
+            time_zone => 'Asia/Kolkata');
         # sunrise at Mumbai
         my $date =
         DateTime::Calendar::VikramaSamvata::Northern->from_object(
