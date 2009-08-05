@@ -34,11 +34,11 @@ DateTime::Indic::Utils - Utility functions for Indian calendar calculation
 
 =head1 VERSION
 
-Version 0.01
+Version 0.2
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.2';
 
 =head1 SYNOPSIS
 
@@ -115,7 +115,7 @@ Time from apogee to apogee, with bija correction.
 
 =cut
 
-use constant anomalistic_month => 1_577_917_828 / 57_753_336 - 488_199;
+use constant anomalistic_month => 1_577_917_828 / ( 57_753_336 - 488_199 );
 
 =head2 J1900
 
@@ -147,7 +147,7 @@ Mean time from new moon to new moon.
 
 =cut
 
-use constant synodic_month => 29 + ( 7_087_771 / 13_358_334 );
+use constant synodic_month => 29.530_588_68;
 
 =head2 creation
 
@@ -172,7 +172,6 @@ sub ayanamsha {
     # utc_rd_values() existing.
     my $jdate = ( $dt->utc_rd_values )[0] + 1_721_424.5;
 
-    my $d2r = 0.0174532925;
     my $t = ( ( $jdate - J1900 ) - 0.5 ) / 36_525;
 
     # Mean lunar node
@@ -182,8 +181,8 @@ sub ayanamsha {
     my $off = ( 259_205_536.0 * $t + 2_013_816.0 ) / 3_600.0;
 
     $off =
-      17.23 * sin( $d2r * $ln ) +
-      1.27 * sin( $d2r * $off ) -
+      17.23 * sin_deg( $ln ) +
+      1.27 * sin_deg( $off ) -
       ( 5_025.64 + 1.11 * $t ) * $t;
 
     # 84038.27 = Fagan-Bradley 80861.27 = Chitrapaksha (Lahiri)
@@ -207,7 +206,7 @@ sub lunar_longitude {
     my $jdate  = $days + 1_721_425.5;
     my $offset = ( 86_400 - $seconds ) / 3_600.0;
 
-    my $t  = ( $jdate - 2_415_020 - $offset / 24.0 ) / 36_525.0;
+    my $t  = ( $jdate - J1900 - $offset / 24.0 ) / 36_525.0;
     my $dn = $t * 36_525.0;
     my ( $A, $B, $C, $D, $E, $F, $l, $M, $mm );
     my $t2 = $t * $t;
@@ -334,6 +333,31 @@ sub lunar_on_or_before {
       );
 }
 
+=head2 saura_rashi ($dt)
+
+returns the zodiacal sign of the sun at DateTime C<$dt> as an integer in the
+range 1 .. 12.
+
+=cut
+
+sub saura_rashi {
+    my ($dt) = @_;
+
+    return floor( ( solar_longitude($dt) + ayanamsha($dt) ) / 30.0 ) + 1;
+}
+
+=head2 saura_varsha ($dt)
+
+Returns the solar year at datetime C<$dt>.
+
+=cut
+
+sub saura_varsha {
+    my ($dt) = @_;
+
+    return floor( ( ( $dt->utc_rd_values )[0] - epoch ) / sidereal_year );
+}
+
 =head2 solar_longitude($dt)
 
 Given a L<DateTime> object C<$dt>, returns the sayana longitude of the sun at 
@@ -348,7 +372,7 @@ sub solar_longitude {
     my $jdate  = $days + 1_721_425.5;
     my $offset = ( 86_400 - $seconds ) / 3_600.0;
 
-    my $t    = ( $jdate - 2_415_020 - $offset / 24.0 ) / 36_525.0;
+    my $t    = ( $jdate - J1900 - $offset / 24.0 ) / 36_525.0;
     my $dn   = $t * 36_525.0;
     my $t2   = $t * $t;
     my $t3   = $t2 * $t;
@@ -424,31 +448,6 @@ sub solar_longitude {
     my $rad = $orbr * ( 1.0 - $ecc * ( cos $anec ) ) + $c2;
 
     return revolution( $trlong * 180.0 / pi );
-}
-
-=head2 saura_rashi ($dt)
-
-returns the zodiacal sign of the sun at DateTime C<$dt> as an integer in the
-range 1 .. 12.
-
-=cut
-
-sub saura_rashi {
-    my ($dt) = @_;
-
-    return floor( ( solar_longitude($dt) + ayanamsha($dt) ) / 30.0 ) + 1;
-}
-
-=head2 saura_varsha ($dt)
-
-Returns the solar year at datetime C<$dt>.
-
-=cut
-
-sub saura_varsha {
-    my ($dt) = @_;
-
-    return floor( ( ( $dt->utc_rd_values )[0] - epoch ) / sidereal_year );
 }
 
 =head2 tithi_at_dt ($dt)
