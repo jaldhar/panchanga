@@ -22,9 +22,10 @@ our @EXPORT_OK = qw/
   ayanamsha
   lunar_longitude
   lunar_on_or_before
-  solar_longitude
+  newmoon
   saura_rashi
   saura_varsha
+  solar_longitude
   tithi_at_dt
   /;
 
@@ -38,16 +39,15 @@ Version 0.2
 
 =cut
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 =head1 SYNOPSIS
 
   my $dt = DateTime->now;
   
-  my $ayanamsha = ayanamsha($dt);
+  my $ayanamsha = ayanamsha(J1900);
 
-  my $moon = lunar_longitude($dt);
-  
+  my $moon = lunar_longitude($J1900);
   
   my $d1 = DateTime::Calendar::VikramaSamvata::Gujarati->new(
     varsha => 2064,
@@ -63,9 +63,12 @@ our $VERSION = '0.2';
   );
   my $bool = lunar_on_or_before($d1, $d2);
   
-  my $sun = solar_longitude($dt);
+  my $previous_newmoon = newmoon(J1900, 0);
+  my $next_newmoon     = newmoon(J1900, 1);
+  
+  my $sun = solar_longitude(J1900);
 
-  my $rashi = saura_rashi($dt);
+  my $rashi = saura_rashi(J1900);
   
   my $year = saura_varsha($dt);
   
@@ -86,9 +89,6 @@ These functions and constants were not included directly in
 L<DateTime::Indic::Chandramana> as they are more useful stand-alone. None of 
 them are exported by default.
 
-Most of the functions operate on L<DateTime> objects which I would like to 
-change wherever possible.
-
 =head1 CONSTANTS
 
 =head2 epoch
@@ -103,7 +103,7 @@ use constant epoch => -1_132_959;
 
 =head2 anomalistic_year
 
-Time from aphelion to aphelion.
+Mean time from aphelion to aphelion.
 
 =cut
 
@@ -111,7 +111,7 @@ use constant anomalistic_year => 1_577_917_828_000 / ( 4_320_000_000 - 387 );
 
 =head2 anomalistic_month
 
-Time from apogee to apogee, with bija correction.
+Mean time from apogee to apogee with bija correction.
 
 =cut
 
@@ -135,7 +135,7 @@ use constant sidereal_year => 365 + ( 279_457 / 1_080_000 );
 
 =head2 sidereal_month
 
-Mean length of Hindu sidereal month.
+Mean time it takes for the moon to make one revolution around the earth.
 
 =cut
 
@@ -151,7 +151,7 @@ use constant synodic_month => 29.530_588_68;
 
 =head2 creation
 
-Fixed date of the beginning of the present yuga cycle.
+Fixed (RD) date of the beginning of the present yuga cycle.
 
 =cut
 
@@ -159,18 +159,15 @@ use constant creation => epoch - 1_955_880_000 * sidereal_year;
 
 =head1 FUNCTIONS
 
-=head2 ayanamsha($dt)
+=head2 ayanamsha($jdate)
 
-Given a datetime object, returns the chitrapakSha ayanAMsha.
+Given a Julian date C<$jdate>, returns the chitrapakSha ayanAMsha in decimal
+degrees.
 
 =cut
 
 sub ayanamsha {
-    my ($dt) = @_;
-
-    # Although most DateTime objects have a jd() method we can only rely on
-    # utc_rd_values() existing.
-    my $jdate = ( $dt->utc_rd_values )[0] + 1_721_424.5;
+    my ($jdate) = @_;
 
     my $t = ( ( $jdate - J1900 ) - 0.5 ) / 36_525;
 
@@ -181,8 +178,8 @@ sub ayanamsha {
     my $off = ( 259_205_536.0 * $t + 2_013_816.0 ) / 3_600.0;
 
     $off =
-      17.23 * sin_deg( $ln ) +
-      1.27 * sin_deg( $off ) -
+      17.23 * sin_deg($ln) +
+      1.27 * sin_deg($off) -
       ( 5_025.64 + 1.11 * $t ) * $t;
 
     # 84038.27 = Fagan-Bradley 80861.27 = Chitrapaksha (Lahiri)
@@ -191,22 +188,18 @@ sub ayanamsha {
     return $off;
 }
 
-=head2 lunar_longitude($dt)
+=head2 lunar_longitude($jdate)
 
-Given a L<DateTime> object C<$dt>, returns the sayana longitude of the moon at 
-C<$dt> in decimal degrees.
+Given a Julian date C<$jdate>, returns the sAyana longitude of the moon at 
+C<$jdate> in decimal degrees.
 
 =cut
 
 sub lunar_longitude {
-    my ($dt) = @_;
+    my ($jdate) = @_;
     ## no critic 'ProhibitParensWithBuiltins'
 
-    my ( $days, $seconds, $nano ) = $dt->utc_rd_values;
-    my $jdate  = $days + 1_721_425.5;
-    my $offset = ( 86_400 - $seconds ) / 3_600.0;
-
-    my $t  = ( $jdate - J1900 - $offset / 24.0 ) / 36_525.0;
+    my $t  = ( $jdate - J1900 ) / 36_525.0;
     my $dn = $t * 36_525.0;
     my ( $A, $B, $C, $D, $E, $F, $l, $M, $mm );
     my $t2 = $t * $t;
@@ -333,22 +326,107 @@ sub lunar_on_or_before {
       );
 }
 
-=head2 saura_rashi ($dt)
+=head2 newmoon($jdate, $arg)
 
-returns the zodiacal sign of the sun at DateTime C<$dt> as an integer in the
-range 1 .. 12.
+Calculates the moment of the nearest new moon at C<$jdate>. (the error does
+not exceed 2 minutes). The result is Julian date/time in UT. C<$arg> = 0 for
+the nearest previous new moon, 1 for the nearest next moon.
+
+=cut
+
+# See http://www.iclasses.org/assets/math/scripts/science/new_and_full_moon_calculator.html
+sub newmoon {
+    my ( $jdate, $arg ) = @_;
+
+    # Estimate of number of lunar cycles since J1900.
+    my $k = floor( ( ( $jdate - J1900 ) / 365.25 ) * 12.3685 ) + $arg - 1;
+
+    # time in Julian centuries since J1900
+    my $t = ( $jdate - J1900 ) / 36525.0;
+
+    # square for frequent use
+    my $t2 = $t * $t;
+
+    # cube for frequent use
+    my $t3 = $t2 * $t;
+
+    my $jdnv = 0;
+    while ( $jdnv <= $jdate ) {
+
+        # mean time of phase
+        my $jdnext =
+          (2_415_020.759_33) +
+          synodic_month * $k +
+          0.000_117_8 * $t2 -
+          0.000_000_155 * $t3 +
+          0.000_33 * sin( deg2rad( 166.56 + 132.87 * $t - 0.009_173 * $t2 ) );
+
+        # Sun's mean anomaly
+        my $m =
+          deg2rad( 359.224_2 +
+              29.105_356_08 * $k -
+              0.000_033_3 * $t2 -
+              0.000_003_47 * $t3 );
+
+        # Moon's mean anomaly
+        my $mprime =
+          deg2rad( 306.025_3 +
+              385.816_918_06 * $k +
+              0.010_730_6 * $t2 +
+              0.000_012_36 * $t3 );
+
+        # Moon's argument of latitude
+        my $f =
+          deg2rad( 21.296_4 +
+              390.670_506_46 * $k -
+              0.001_652_8 * $t2 -
+              0.000_002_39 * $t3 );
+
+        # Correction for new moon
+        my $djd =
+          ( 0.1734 - 0.000_393 * $t ) * sin($m) + 0.002_1 * sin( 2 * $m );
+        $djd = $djd - 0.406_8 * sin($mprime) + 0.016_1 * sin( 2 * $mprime );
+        $djd = $djd - 0.000_4 * sin( 3 * $mprime ) + 0.010_4 * sin( 2 * $f );
+        $djd =
+          $djd - 0.005_1 * sin( $m + $mprime ) - 0.007_4 * sin( $m - $mprime );
+        $djd =
+          $djd + 0.000_4 * sin( 2 * $f + $m ) - 0.000_4 * sin( 2 * $f - $m );
+        $djd =
+          $djd -
+          0.000_6 * sin( 2 * $f + $mprime ) +
+          0.001 * sin( 2 * $f - $mprime );
+        $djd = $djd + 0.000_5 * sin( $m + 2 * $mprime );
+        $jdnext += $djd;
+        $k++;
+
+        # This bit solves a problem where the function "overshoots" by one
+        # lunar cycle.  It works for our purposes but I am not convinced it
+        # is a proper solution to the general problem.
+        if ( $arg < 1 && $jdnext >= $jdate ) {
+            last;
+        }
+
+        $jdnv = $jdnext;
+    }
+    return $jdnv;
+}
+
+=head2 saura_rashi ($jdate)
+
+returns the nirAyana rAshi of the sun at Julian date C<$jdate> as an integer 
+in the range 1 .. 12.
 
 =cut
 
 sub saura_rashi {
-    my ($dt) = @_;
+    my ($jdate) = @_;
 
-    return floor( ( solar_longitude($dt) + ayanamsha($dt) ) / 30.0 ) + 1;
+    return floor( ( solar_longitude($jdate) + ayanamsha($jdate) ) / 30.0 ) + 1;
 }
 
 =head2 saura_varsha ($dt)
 
-Returns the solar year at datetime C<$dt>.
+Returns the saura varSha at datetime C<$dt>.
 
 =cut
 
@@ -358,21 +436,17 @@ sub saura_varsha {
     return floor( ( ( $dt->utc_rd_values )[0] - epoch ) / sidereal_year );
 }
 
-=head2 solar_longitude($dt)
+=head2 solar_longitude($jdate)
 
-Given a L<DateTime> object C<$dt>, returns the sayana longitude of the sun at 
-C<$dt> in decimal degrees.
+Given a Julian date  C<$jdate>, returns the sAyana longitude of the sun at 
+C<$jdate> in decimal degrees.
 
 =cut
 
 sub solar_longitude {
-    my ($dt) = @_;
+    my ($jdate) = @_;
 
-    my ( $days, $seconds, $nano ) = $dt->utc_rd_values;
-    my $jdate  = $days + 1_721_425.5;
-    my $offset = ( 86_400 - $seconds ) / 3_600.0;
-
-    my $t    = ( $jdate - J1900 - $offset / 24.0 ) / 36_525.0;
+    my $t    = ( $jdate - J1900 ) / 36_525.0;
     my $dn   = $t * 36_525.0;
     my $t2   = $t * $t;
     my $t3   = $t2 * $t;
@@ -460,7 +534,7 @@ range 1..30.
 sub tithi_at_dt {
     my ($dt) = @_;
 
-    my $t = mod( lunar_longitude($dt) - solar_longitude($dt), 360 );
+    my $t = mod( lunar_longitude( $dt->jd ) - solar_longitude( $dt->jd ), 360 );
 
     return ceil( $t / 12.0 );
 }

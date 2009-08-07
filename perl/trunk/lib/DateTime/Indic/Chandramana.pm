@@ -5,9 +5,9 @@ package DateTime::Indic::Chandramana;
 use warnings;
 use strict;
 use Carp qw/ carp croak /;
-use DateTime::Event::Lunar;
 use DateTime::Indic::Utils qw/ epoch sidereal_year sidereal_month
-  lunar_on_or_before saura_rashi saura_varsha solar_longitude tithi_at_dt
+  lunar_on_or_before newmoon saura_rashi saura_varsha solar_longitude
+  tithi_at_dt
   /;
 use DateTime::Event::Sunrise;
 use DateTime::Util::Calc qw/ amod dt_from_moment mod search_next /;
@@ -334,14 +334,14 @@ sub new {
                 },
             },
             time_zone => {
-                type      => SCALAR | OBJECT,
-                default   => 'Asia/Kolkata', # Indian Standard Time
+                type    => SCALAR | OBJECT,
+                default => 'Asia/Kolkata',    # Indian Standard Time
             },
         }
     );
 
     my $self = bless \%args, $class;
-    
+
     $self->{lunar_day} =
       ( $self->{paksha} == 1 && $self->{tithi} < 30 )
       ? $self->{tithi} + 15
@@ -356,7 +356,7 @@ sub new {
     ( $self->{rd_days}, $self->{rd_secs}, $self->{rd_nanosecs} ) =
       $self->_fixed_from_lunar;
 
-    $self->{vara} = amod($self->{rd_days} - epoch - 1, 7);
+    $self->{vara} = amod( $self->{rd_days} - epoch - 1, 7 );
 
     return $self;
 }
@@ -377,23 +377,23 @@ sub _fixed_from_lunar {
     my $s = floor(
         $approx - ( 1.0 / 360.0 ) * sidereal_year * (
             mod(
-                solar_longitude( dt_from_moment($approx)
-                    ->set_time_zone($self->{time_zone}) ) -
-                  $self->{masa} * 30 +
-                  180,
+                solar_longitude(
+                    dt_from_moment($approx)->set_time_zone( $self->{time_zone} )
+                      ->jd
+                  ) - $self->{masa} * 30 + 180,
                 360
               ) - 180
         )
     );
 
-    my $k = tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) )
-        ->set_time_zone($self->{time_zone}) );
+    my $k =
+      tithi_at_dt( dt_from_moment( $s + ( 1.0 / 4.0 ) )
+          ->set_time_zone( $self->{time_zone} ) );
 
     my $x;
 
-    my $mid =
-      $self->_lunar_from_fixed( 
-        dt_from_moment( $s - 15 )->set_time_zone($self->{time_zone}),
+    my $mid = $self->_lunar_from_fixed(
+        dt_from_moment( $s - 15 )->set_time_zone( $self->{time_zone} ),
         $self->{sun} );
     if (
         $mid->{masa} < $self->{masa}
@@ -410,14 +410,14 @@ sub _fixed_from_lunar {
     my $est = $s + $self->{lunar_day} - $x;
 
     my $tau = $est - mod(
-        tithi_at_dt( dt_from_moment( 
-          $est + ( 1.0 / 4.0 ) )->set_time_zone($self->{time_zone}) ) -
-          $self->{lunar_day} +
-          15,
+        tithi_at_dt(
+            dt_from_moment( $est + ( 1.0 / 4.0 ) )
+              ->set_time_zone( $self->{time_zone} )
+          ) - $self->{lunar_day} + 15,
         30
     ) + 15;
 
-    my $date = dt_from_moment($tau)->set_time_zone($self->{time_zone});
+    my $date = dt_from_moment($tau)->set_time_zone( $self->{time_zone} );
 
     search_next(
         base  => $date,
@@ -437,8 +437,8 @@ sub _lunar_from_fixed {
 
     my $result = {};
 
-    my $suryodaya = $sun->sunrise_datetime($dt)->
-        set_time_zone($dt->time_zone);
+    my $suryodaya =
+      $sun->sunrise_datetime($dt)->set_time_zone( $dt->time_zone );
 
     $result->{lunar_day} = tithi_at_dt($suryodaya);
 
@@ -459,14 +459,8 @@ sub _lunar_from_fixed {
     }
 
     # masa and adhikamasa
-    my $pnm = DateTime::Event::Lunar->new_moon_before(
-        datetime     => $suryodaya,
-        on_or_before => 1
-    );
-    my $nnm = DateTime::Event::Lunar->new_moon_after(
-        datetime    => $suryodaya,
-        on_or_after => 1
-    );
+    my $pnm = newmoon( $suryodaya->jd, 0 );
+    my $nnm = newmoon( $suryodaya->jd, 1 );
     my $solarmonth     = saura_rashi($pnm);
     my $nextsolarmonth = saura_rashi($nnm);
 
@@ -587,6 +581,7 @@ sub from_object {
         adhikatithi => $results->{adhikatithi},
         latitude    => $args{latitude},
         longitude   => $args{longitude},
+        time_zone   => $args{object}->time_zone,
     );
     return $newobj;
 }

@@ -13,7 +13,6 @@ my $builder = Module::Build->new(
     dist_version        => '0.1',
     build_requires => {
         'DateTime'                      => 0,
-        'DateTime::Event::Lunar'        => 0.06,
         'DateTime::Event::Sunrise'      => 0,
         'DateTime::Util::Calc'          => 0.13,
         'Memoize'                       => 0,
