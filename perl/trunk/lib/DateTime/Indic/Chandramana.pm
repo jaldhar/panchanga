@@ -11,7 +11,6 @@ use DateTime::Indic::Utils qw/ epoch sidereal_year sidereal_month
   /;
 use DateTime::Event::Sunrise;
 use DateTime::Util::Calc qw/ amod dt_from_moment mod search_next /;
-use Memoize;
 use Params::Validate qw/ validate BOOLEAN SCALAR OBJECT UNDEF /;
 use POSIX qw/ floor /;
 
@@ -363,8 +362,6 @@ sub new {
 
 sub _fixed_from_lunar {
     my ($self) = @_;
-
-    memoize('_lunar_from_fixed');
 
     my $approx =
       epoch +

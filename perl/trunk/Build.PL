@@ -15,7 +15,6 @@ my $builder = Module::Build->new(
         'DateTime'                      => 0,
         'DateTime::Event::Sunrise'      => 0,
         'DateTime::Util::Calc'          => 0.13,
-        'Memoize'                       => 0,
         'Params::Validate'              => 0,
         'Test::More'                    => 0,
     },
