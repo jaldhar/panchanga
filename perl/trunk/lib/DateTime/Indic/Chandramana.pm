@@ -426,7 +426,7 @@ sub _fixed_from_lunar {
         next => sub { $_[0]->add( days => 1 ); },
     );
 
-    return ( $date->utc_rd_values )[0];
+    return $date->utc_rd_values;
 }
 
 sub _lunar_from_fixed {
