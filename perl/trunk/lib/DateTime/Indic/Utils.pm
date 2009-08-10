@@ -14,6 +14,7 @@ our @EXPORT_OK = qw/
   epoch
   anomalistic_year
   anomalistic_month
+  J0
   J1900
   sidereal_year
   sidereal_month
@@ -116,6 +117,14 @@ Mean time from apogee to apogee with bija correction.
 =cut
 
 use constant anomalistic_month => 1_577_917_828 / ( 57_753_336 - 488_199 );
+
+=head2 J0
+
+The fixed (RD) date of Julian date 0
+
+=cut
+
+use constant J0 => -1_721_425;
 
 =head2 J1900
 
