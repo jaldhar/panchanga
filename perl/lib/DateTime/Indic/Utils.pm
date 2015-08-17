@@ -551,7 +551,7 @@ sub tithi_at_dt {
 =head1 BUGS
 
 Please report any bugs or feature requests through the web interface at
-<http://code.google.com/p/panchanga/issues/list>. I
+L<https://github.com/jaldhar/panchanga/issues>. I
 will be notified, and then you’ll automatically be notified of progress
 on your bug as I make changes. B<Please do not use rt.cpan.org!.>
 
