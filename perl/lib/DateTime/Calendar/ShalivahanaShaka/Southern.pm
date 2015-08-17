@@ -87,9 +87,9 @@ You can also look for information at:
 
 L<http://code.google.com/p/panchanga/>
 
-=item * This projects (read-only) subversion source code repository
+=item * This projects git source code repository
 
-L<http://panchanga.googlecode.com/svn/perl/>
+L<https://github.com/jaldhar/panchanga/tree/master/perl>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 

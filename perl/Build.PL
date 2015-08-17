@@ -19,6 +19,11 @@ my $builder = Module::Build->new(
         'Test::More'                    => 0,
     },
     add_to_cleanup      => [ 'DateTime-Indic-*' ],
+    meta_merge => {
+        resources => {
+            repository => 'https://github.com/jaldhar/panchanga/tree/master/perl'
+        }
+    },
     create_makefile_pl => 'traditional',
     sign                => 1,
 );
