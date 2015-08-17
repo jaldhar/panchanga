@@ -34,7 +34,7 @@ DateTime::Indic::Utils - Utility functions for Indian calendar calculation
 
 =head1 VERSION
 
-Version 0.2
+Version 0.3
 
 =cut
 
