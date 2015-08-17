@@ -1,7 +1,5 @@
 package DateTime::Indic::Utils;
 
-# $Id$
-
 use base 'Exporter';
 use warnings;
 use strict;
@@ -571,10 +569,6 @@ datetime@perl.org email list. See L<http://lists.perl.org/> for more details.
 You can also look for information at:
 
 =over 4
-
-=item * This projects web site
-
-L<http://code.google.com/p/panchanga/>
 
 =item * This projects git source code repository
 

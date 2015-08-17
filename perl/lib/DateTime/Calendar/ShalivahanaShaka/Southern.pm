@@ -83,10 +83,6 @@ You can also look for information at:
 
 =over 4
 
-=item * This projects web site
-
-L<http://code.google.com/p/panchanga/>
-
 =item * This projects git source code repository
 
 L<https://github.com/jaldhar/panchanga/tree/master/perl>
