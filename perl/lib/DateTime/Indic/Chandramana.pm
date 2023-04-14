@@ -685,9 +685,8 @@ sub strftime {
     my @r;
     foreach my $f (@formats) {
         $f =~ s/
-                (
-                 ?:
-                 %{(\w+)} # method name like %{day_name}
+                (?:
+                 %\{(\w+)\} # method name like %{day_name}
                  |
                  %([%a-zA-Z]) # single character specifier like %d
                 )
